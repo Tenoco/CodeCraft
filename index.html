@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeCraft - Infinite Crafting Game</title>
+    <meta name="description" content="CodeCraft is an infinite crafting game where players can combine elements to create new items. Explore endless possibilities and let your creativity run wild!">
+    <meta name="keywords" content="crafting game, infinite crafting, sandbox game, CodeCraft, creativity, elements, combinations">
+    <meta name="author" content="T€N0C0">
+    <link rel="icon" href="icon.jpg" type="image/jpg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CodeCraft</h1>
+        <div class="items" id="itemsContainer">
+            <button class="item" data-item="Water">🌊 Water</button>
+            <button class="item" data-item="Wind">🌬️ Wind</button>
+            <button class="item" data-item="Fire">🔥 Fire</button>
+            <button class="item" data-item="Rock">🪨 Rock</button>
+            <button class="item" data-item="Earth">🌍 Earth</button>
+            <button class="item" data-item="Ice">❄️ Ice</button>
+            <button class="item" data-item="Lightning">⚡ Lightning</button>
+            <button class="item" data-item="Steam">💨 Steam</button>
+        </div>
+        <button id="combineButton">Combine</button>
+        <div class="result-area" id="resultArea"></div>
+
+        <!-- Modal for displaying results -->
+        <div class="modal" id="resultModal">
+            <div class="modal-content">
+                <span id="closeModal">&times;</span>
+                <p id="modalMessage"></p>
+            </div>
+        </div>
+
+        <script src="script.js"></script>
+    </div>
+</body>
+</html>
