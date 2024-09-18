@@ -1,9 +1,10 @@
 body {
     background-color: #1e1e1e;
     color: #ffffff;
-    font-family: 'Courier New', monospace;
+    font-family: 'Courier New', monospace; /* Monospace font for all text */
     font-weight: bold;
     display: flex;
+    flex-direction: column; /* Column layout for better organization */
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -16,6 +17,8 @@ body {
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    width: 80%; /* Set a width for better organization */
+    max-width: 600px; /* Max width to prevent stretching */
 }
 
 .items {
@@ -27,87 +30,107 @@ body {
     color: #ffffff;
     border: none;
     padding: 15px 25px;
-    margin: 5px;
+    margin: 5px; /* Consistent margin for items */
     cursor: pointer;
     border-radius: 10px;
     transition: background-color 0.3s ease;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+    font-family: 'Courier New', monospace; /* Monospace font for buttons */
 }
 
 .item:hover {
-    background-color: #555555;
+    background-color: #555555; /* Hover effect */
 }
 
 .item.selected {
-    background-color: #007bff;
+    background-color: #007bff; /* Selected item color */
 }
 
+/* Sticky Heading */
+.sticky-heading {
+    position: fixed; /* Fixed positioning */
+    top: 10px; /* Distance from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+    background-color: #2a2a2a; /* Background color */
+    padding: 10px; /* Padding around heading */
+    border-radius: 10px; /* Rounded corners */
+    z-index: 1000; /* Ensure it appears above other content */
+}
+
+/* Sticky Combine Button */
 #combineButton {
-    background-color: #007bff;
+    position: fixed; /* Fixed positioning */
+    bottom: 20px; /* Distance from the bottom */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+    background-color: #007bff; 
     color: #ffffff;
     border: none;
     padding: 15px 25px;
-    margin-top: 10px;
     cursor: pointer;
     border-radius: 10px;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+    font-family: 'Courier New', monospace; /* Monospace font for combine button */
 }
 
 #combineButton:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; 
 }
 
 .result-area {
-    margin-top: 20px;
+   margin-top :20px; 
 }
 
 /* Modal Styles */
 .modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.7);
+   display :none; 
+   position :fixed; 
+   z-index :1; 
+   left :0; 
+   top :0; 
+   width :100%; 
+   height :100%; 
+   overflow :auto; 
+   background-color :rgba(0,0,0,0.7); 
 }
 
 .modal-content {
-    background-color: #3a3a3a;
-    color: #ffffff;
-    margin: 15% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 80%;
+   background-color :#3a3a3a; 
+   color :#ffffff; 
+   margin :15% auto; 
+   padding :20px; 
+   border-radius :10px; 
+   width :80%; 
 }
 
 #closeModal {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
+   color :#aaa; 
+   float:right; 
+   font-size :28px; 
 }
 
 #closeModal:hover,
-#closeModal:focus {
-    color: white;
+#closeModal :focus {
+   color:white; 
 }
 
 /* Rankings Styles */
 .rankings-card {
-    margin-top: 20px;
-    background-color: #333333;
-    padding: 20px;
-    border-radius: 15px;
-    color: #ffffff;
+   margin-top :20px; 
+   background-color :#333333; 
+   padding :20px; 
+   border-radius :15px; 
+   color :#ffffff; 
 }
 
 .rankings-card h2,
 .rankings-card h3,
 .rankings-card ul li {
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+   font-family :'Courier New', monospace; 
+   font-weight:bold; 
+}
+
+/* Craft Heading Style */
+.craft-heading {
+   font-size: 24px; /* Font size for craft heading */
+   margin-bottom: 15px; /* Space below the heading */
 }
