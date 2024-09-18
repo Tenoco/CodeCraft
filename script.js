@@ -118,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const [key, fullValue] = fullItemNameEntry;
                 const [emoji, itemName] = fullValue.split(' ');
                 createItemButton(emoji, itemName); // Create button as if freshly made
+                addItemClickEvent(document.querySelector(`[data-item="${itemName}"]`)); // Re-attach click event
             }
         });
     }
