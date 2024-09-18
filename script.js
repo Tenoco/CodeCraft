@@ -1,24 +1,34 @@
+// Define combinations at the top level so it's accessible throughout the script
+const combinations = {
+    "WaterWind": "Storm 🌩️",
+    "FireRock": "Lava 🌋",
+    // ... (add more combinations as needed)
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     const itemsContainer = document.getElementById('itemsContainer');
     const combineButton = document.getElementById('combineButton');
-    const resultArea = document.getElementById('resultArea');
     const resultModal = document.getElementById('resultModal');
     const modalMessage = document.getElementById('modalMessage');
     const closeModal = document.getElementById('closeModal');
 
-    let selectedItems = [];
-    let userScore = getCookie('userScore') ? parseInt(getCookie('userScore')) : 0;
-    let craftedItems = getCookie('craftedItems') ? JSON.parse(getCookie('craftedItems')) : [];
+    // Create score display element
+    const scoreDisplay = document.createElement('div');
+    scoreDisplay.id = 'scoreDisplay';
+    document.querySelector('.container').insertBefore(scoreDisplay, itemsContainer);
 
-    // Load previously crafted items
-    craftedItems.forEach(itemName => {
-        const newItem = document.createElement('button');
-        newItem.className = 'item';
-        newItem.dataset.item = itemName;
-        newItem.textContent = itemName; // Assuming the item name includes the emoji
-        itemsContainer.appendChild(newItem);
-        addItemClickEvent(newItem);
-    });
+    // Check if all necessary elements exist
+    if (!itemsContainer || !combineButton || !resultModal || !modalMessage || !closeModal || !scoreDisplay) {
+        console.error("One or more required elements are missing from the HTML.");
+        return; // Exit the script if any element is missing
+    }
+
+    let selectedItems = [];
+    let userScore = 0;
+    let craftedItems = [];
+
+    // Load saved data
+    loadProgress();
 
     function addItemClickEvent(item) {
         item.addEventListener('click', () => {
@@ -32,28 +42,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize item click events
+    // Initialize item click events for existing items
     document.querySelectorAll('.item').forEach(addItemClickEvent);
 
     combineButton.addEventListener('click', () => {
         if (selectedItems.length === 1) {
-            modalMessage.textContent = "Select another item to combine with.";
-            showModal();
+            showModal("Select another item to combine with.");
         } else if (selectedItems.length === 2) {
             const result = checkCombination(selectedItems[0].dataset.item, selectedItems[1].dataset.item);
             if (result) {
-                modalMessage.textContent = `Result of combination: ${result}`;
-                addNewItem(result);
+                showModal(`Result of combination: ${result}`);
+                addNewItem(result); // Simulate adding a new item
                 updateScore();
+                saveProgress();
             } else {
-                modalMessage.textContent = "No valid combination exists.";
+                showModal("No valid combination exists.");
             }
-            showModal();
             selectedItems.forEach(i => i.classList.remove('selected'));
             selectedItems = [];
         } else {
-            modalMessage.textContent = "Please select an item first!";
-            showModal();
+            showModal("Please select two items to combine!");
         }
     });
 
@@ -62,48 +70,60 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function addNewItem(result) {
-        const newItemName = result.split(" ")[0]; // Get just the name part
+        const [emoji, newItemName] = result.split(' ');
         const existingItem = Array.from(document.querySelectorAll('.item')).find(item => item.dataset.item === newItemName);
 
         // Only add the new item if it doesn't already exist
         if (!existingItem && !craftedItems.includes(newItemName)) {
             craftedItems.push(newItemName);
-            setCookie('craftedItems', JSON.stringify(craftedItems), 365);
+            saveProgress();
 
-            const newItem = document.createElement('button');
-            newItem.className = 'item';
-            newItem.dataset.item = newItemName; // Use just the name for future combinations
-            newItem.textContent = result; // Display the full result with emoji
-            itemsContainer.appendChild(newItem);
-            addItemClickEvent(newItem); // Add click event to the new item
+            // Create a new button as a freshly made item
+            createItemButton(emoji, newItemName);
         }
+    }
+
+    function createItemButton(emoji, itemName) {
+        const newItem = document.createElement('button');
+        newItem.className = 'item'; // Ensure it has the correct class for styling
+        newItem.dataset.item = itemName;
+        newItem.textContent = `${emoji} ${itemName}`;
+        
+        itemsContainer.appendChild(newItem);
+        addItemClickEvent(newItem); // Attach click event for newly created item
     }
 
     function updateScore() {
         userScore++;
-        setCookie('userScore', userScore, 365);
+        scoreDisplay.textContent = `Score: ${userScore}`;
+        saveProgress();
     }
 
-    function setCookie(name, value, days) {
-        const d = new Date();
-        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
-        const expires = `expires=${d.toUTCString()}`;
-        document.cookie = `${name}=${value};${expires};path=/`;
+    function saveProgress() {
+        localStorage.setItem('userScore', userScore);
+        localStorage.setItem('craftedItems', JSON.stringify(craftedItems));
     }
 
-    function getCookie(name) {
-        const cname = `${name}=`;
-        const decodedCookie = decodeURIComponent(document.cookie);
-        const ca = decodedCookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i];
-            while (c.charAt(0) === ' ') c = c.substring(1);
-            if (c.indexOf(cname) === 0) return c.substring(cname.length, c.length);
-        }
-        return "";
+    function loadProgress() {
+        userScore = parseInt(localStorage.getItem('userScore')) || 0;
+        craftedItems = JSON.parse(localStorage.getItem('craftedItems')) || [];
+
+        // Update score display
+        scoreDisplay.textContent = `Score: ${userScore}`;
+
+        // Recreate crafted items as fresh buttons
+        craftedItems.forEach(item => {
+            const fullItemNameEntry = Object.entries(combinations).find(([key, value]) => value.split(' ')[1] === item);
+            if (fullItemNameEntry) {
+                const [key, fullValue] = fullItemNameEntry;
+                const [emoji, itemName] = fullValue.split(' ');
+                createItemButton(emoji, itemName); // Create button as if freshly made
+            }
+        });
     }
 
-    function showModal() {
+    function showModal(message) {
+        modalMessage.textContent = message;
         resultModal.style.display = 'block';
     }
 
@@ -116,13 +136,4 @@ document.addEventListener('DOMContentLoaded', () => {
             resultModal.style.display = 'none';
         }
     }
-
-   // Combinations list moved to the bottom for easy modification
-   const combinations = {
-       "WaterWind": "Storm 🌩️",
-       "FireRock": "Lava 🌋",
-       "WindFire": "Heat 🔥",
-       "RockWater": "Mud 💧",
-       // Add more combinations as needed...
-   };
 });
